@@ -3,31 +3,28 @@ package com.platformer.util.box2d;
 import com.badlogic.gdx.physics.box2d.*;
 import com.platformer.Game;
 
+import static com.platformer.util.Settings.MPP;
+import static com.platformer.util.box2d.PhysicsManager.MASK_PLAYER;
+import static com.platformer.util.box2d.PhysicsManager.PLAYER_BITS;
+
 public class BodyGenerator {
-  private final static short PLAYER_BITS = 0x0001;
-  private final static short NPC_BITS = 0x0002;
-  private final static short WORLD_BITS = 0x0004;
-  private final static short BULLET_BITS = 0x0008;
-//  public final static short BITS = 0x0032;
-
-  private final static short MASK_PLAYER = NPC_BITS | WORLD_BITS | BULLET_BITS;
-  private final static short MASK_NPC = PLAYER_BITS | NPC_BITS | BULLET_BITS;
-  private final static short MASK_WORLD = PLAYER_BITS;
-  private final static short MASK_BULLET_BITS = BULLET_BITS | PLAYER_BITS | NPC_BITS;
-
   private static World world = Game.world;
 
-  public static Body createMapObjectBody(Shape shape) {
+  public static Body createPlayer() {
     BodyDef bodyDef = new BodyDef();
-    bodyDef.type = BodyDef.BodyType.StaticBody;
+    bodyDef.type = BodyDef.BodyType.DynamicBody;
     Body body = world.createBody(bodyDef);
 
     FixtureDef fdef = new FixtureDef();
+
+    PolygonShape shape = new PolygonShape();
+    shape.setAsBox(20 * MPP, 20* MPP);
+
     fdef.shape = shape;
-    fdef.isSensor = true;
+    fdef.isSensor = false;
     fdef.filter.groupIndex = 0;
-    fdef.filter.categoryBits = WORLD_BITS;
-    fdef.filter.maskBits = MASK_WORLD;
+    fdef.filter.categoryBits = PLAYER_BITS;
+    fdef.filter.maskBits = MASK_PLAYER;
     body.createFixture(fdef);
 
     shape.dispose();

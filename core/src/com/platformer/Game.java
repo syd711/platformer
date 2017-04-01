@@ -7,8 +7,6 @@ import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
@@ -17,8 +15,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.platformer.managers.CameraManager;
 import com.platformer.managers.EntityManager;
 import com.platformer.managers.InputManager;
+import com.platformer.managers.LevelManager;
 import com.platformer.util.Settings;
-import com.platformer.util.box2d.LevelCollisionGenerator;
 
 import static com.platformer.util.Settings.PPM;
 
@@ -29,7 +27,7 @@ public class Game extends ApplicationAdapter {
   private Box2DDebugRenderer box2DDebugRenderer;
   private RayHandler rayHandler;
   private SpriteBatch batch;
-  OrthogonalTiledMapRenderer tiledMapRenderer;
+  private OrthogonalTiledMapRenderer tiledMapRenderer;
 
   @Override
   public void create() {
@@ -48,12 +46,7 @@ public class Game extends ApplicationAdapter {
 
     batch = new SpriteBatch();
 
-    TiledMap tiledMap = new TmxMapLoader().load("maps/map_1.tmx");
-//    PhysicsFactory.createBodies(tiledMap);
-    tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
-
-    LevelCollisionGenerator lcg = new LevelCollisionGenerator(world);
-    lcg.createPhysics(tiledMap);
+    tiledMapRenderer = LevelManager.getInstance().loadLevel(batch, "map_1");
 
     //init camera manager
     CameraManager.getInstance().init(camera);

@@ -68,8 +68,8 @@ public class CameraManager {
     float centerX = screenPositionComponent.getDefaultX();
     float centerY = screenPositionComponent.getDefaultY();
 
-    camera.position.x = x;
-    camera.position.y = y;
+    camera.position.x = 500;//x;
+    camera.position.y = 500;//y;
 
     screenPositionComponent.setX(centerX);
     screenPositionComponent.setY(centerY);

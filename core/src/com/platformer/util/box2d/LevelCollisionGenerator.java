@@ -13,8 +13,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.platformer.util.Settings;
 
 import java.util.Iterator;
+
+import static com.platformer.util.box2d.PhysicsManager.MASK_WORLD;
+import static com.platformer.util.box2d.PhysicsManager.WORLD_BITS;
 
 
 /**
@@ -75,13 +79,8 @@ public class LevelCollisionGenerator {
 
       FixtureDef fixtureDef = new FixtureDef();
       fixtureDef.shape = shape;
-      fixtureDef.filter.categoryBits = PhysicsManager.LEVEL_BITS;
-      fixtureDef.filter.maskBits = (short) (PhysicsManager.FRIENDLY_BITS |
-          PhysicsManager.ENEMY_BITS |
-          PhysicsManager.NEUTRAL_BITS |
-          PhysicsManager.FOOT_SENSOR |
-          PhysicsManager.RIGHT_WALL_SENSOR |
-          PhysicsManager.LEFT_WALL_SENSOR);
+      fixtureDef.filter.categoryBits = WORLD_BITS;
+      fixtureDef.filter.maskBits = MASK_WORLD;
 
       Body body = world.createBody(bodyDef);
 
@@ -109,10 +108,10 @@ public class LevelCollisionGenerator {
   private LevelGeometry getRectangle(RectangleMapObject rectangleObject) {
     Rectangle rectangle = rectangleObject.getRectangle();
     PolygonShape polygon = new PolygonShape();
-    Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) * PhysicsManager.PIXELS_TO_METERS,
-        (rectangle.y + rectangle.height * 0.5f) * PhysicsManager.PIXELS_TO_METERS);
-    polygon.setAsBox(rectangle.width * 0.5f * PhysicsManager.PIXELS_TO_METERS,
-        rectangle.height * 0.5f * PhysicsManager.PIXELS_TO_METERS,
+    Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) * Settings.MPP,
+        (rectangle.y + rectangle.height * 0.5f) * Settings.MPP);
+    polygon.setAsBox(rectangle.width * 0.5f * Settings.MPP,
+        rectangle.height * 0.5f * Settings.MPP,
         size,
         0.0f);
     return new LevelGeometry(polygon);
@@ -121,8 +120,8 @@ public class LevelCollisionGenerator {
   private LevelGeometry getCircle(CircleMapObject circleObject) {
     Circle circle = circleObject.getCircle();
     CircleShape circleShape = new CircleShape();
-    circleShape.setRadius(circle.radius * PhysicsManager.PIXELS_TO_METERS);
-    circleShape.setPosition(new Vector2(circle.x * PhysicsManager.PIXELS_TO_METERS, circle.y * PhysicsManager.PIXELS_TO_METERS));
+    circleShape.setRadius(circle.radius * Settings.MPP);
+    circleShape.setPosition(new Vector2(circle.x * Settings.MPP, circle.y * Settings.MPP));
     return new LevelGeometry(circleShape);
   }
 
@@ -133,7 +132,7 @@ public class LevelCollisionGenerator {
     float[] worldVertices = new float[vertices.length];
 
     for(int i = 0; i < vertices.length; ++i) {
-      worldVertices[i] = vertices[i] * PhysicsManager.PIXELS_TO_METERS;
+      worldVertices[i] = vertices[i] * Settings.MPP;
     }
 
     polygon.set(worldVertices);
@@ -146,8 +145,8 @@ public class LevelCollisionGenerator {
 
     for(int i = 0; i < vertices.length / 2; ++i) {
       worldVertices[i] = new Vector2();
-      worldVertices[i].x = vertices[i * 2] * PhysicsManager.PIXELS_TO_METERS;
-      worldVertices[i].y = vertices[i * 2 + 1] * PhysicsManager.PIXELS_TO_METERS;
+      worldVertices[i].x = vertices[i * 2] * Settings.MPP;
+      worldVertices[i].y = vertices[i * 2 + 1] * Settings.MPP;
     }
 
     ChainShape chain = new ChainShape();
