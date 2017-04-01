@@ -2,6 +2,7 @@ package com.platformer.entities;
 
 import com.badlogic.gdx.math.Vector2;
 import com.platformer.components.ComponentFactory;
+import com.platformer.components.PositionComponent;
 import com.platformer.components.ScreenPositionComponent;
 
 /**
@@ -16,13 +17,13 @@ public class Player extends GameEntity {
   }
 
   public Player() {
-    instance = this;
     createComponents();
   }
 
   public void createComponents() {
-    ComponentFactory.addPositionComponent(this);
-    add(new ScreenPositionComponent(0, 0));
+    PositionComponent positionComponent = ComponentFactory.addPositionComponent(this);
+    positionComponent.setPosition(500, 500);
+    add(new ScreenPositionComponent(500, 500));
   }
 
   public Vector2 getCenter() {

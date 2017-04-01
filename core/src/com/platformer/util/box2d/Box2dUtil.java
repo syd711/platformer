@@ -1,4 +1,4 @@
-package com.platformer.util;
+package com.platformer.util.box2d;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.platformer.entities.Player;
+import com.platformer.util.Settings;
 
 import static com.platformer.util.Settings.MPP;
 

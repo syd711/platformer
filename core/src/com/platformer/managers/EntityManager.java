@@ -9,7 +9,7 @@ import com.platformer.components.ComponentFactory;
 import com.platformer.components.Destroyable;
 import com.platformer.entities.GameEntity;
 import com.platformer.entities.Player;
-import com.platformer.util.Box2dUtil;
+import com.platformer.util.box2d.Box2dUtil;
 
 import java.util.ArrayList;
 import java.util.List;
