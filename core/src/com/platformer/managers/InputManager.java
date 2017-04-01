@@ -4,8 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.platformer.Game;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Handles all kind of user input.
@@ -13,11 +12,10 @@ import com.platformer.Game;
 public class InputManager implements InputProcessor {
   private static InputManager instance = new InputManager();
 
-  private OrthographicCamera camera;
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
+  private Vector2 keyForce = new Vector2(0,0);
 
   private InputManager() {
-    camera = Game.camera;
   }
 
   public void init() {
@@ -66,6 +64,29 @@ public class InputManager implements InputProcessor {
 
     return false;
   }
+
+  public void update() {
+    updateKeyForce();
+  }
+
+  private void updateKeyForce() {
+    keyForce.x = 0;
+    if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+      keyForce.x -= 1;
+    }
+    if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+      keyForce.x += 1;
+    }
+
+    keyForce.y = 0;
+    if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+      keyForce.y -= 1;
+    }
+    if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+      keyForce.y += 1;
+    }
+  }
+
 
   @Override
   public boolean keyTyped(char character) {
@@ -118,5 +139,9 @@ public class InputManager implements InputProcessor {
   @Override
   public boolean scrolled(int amount) {
     return false;
+  }
+
+  public Vector2 getKeyForce() {
+    return keyForce;
   }
 }

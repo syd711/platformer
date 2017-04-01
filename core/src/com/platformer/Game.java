@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.platformer.entities.Player;
 import com.platformer.managers.CameraManager;
 import com.platformer.managers.EntityManager;
 import com.platformer.managers.InputManager;
@@ -96,6 +97,8 @@ public class Game extends ApplicationAdapter {
     }
 
     EntityManager.getInstance().update();
+    InputManager.getInstance().update();
+    Player.getInstance().update();
     GdxAI.getTimepiece().update(deltaTime);//TODO not sure if required
   }
 

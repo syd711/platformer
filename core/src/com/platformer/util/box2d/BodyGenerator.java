@@ -18,14 +18,16 @@ public class BodyGenerator {
     FixtureDef fdef = new FixtureDef();
 
     PolygonShape shape = new PolygonShape();
-    shape.setAsBox(20 * MPP, 20* MPP);
+    shape.setAsBox(40 * MPP, 40* MPP);
 
     fdef.shape = shape;
     fdef.isSensor = false;
+    fdef.friction = 0.5f;
     fdef.filter.groupIndex = 0;
     fdef.filter.categoryBits = PLAYER_BITS;
     fdef.filter.maskBits = MASK_PLAYER;
     body.createFixture(fdef);
+    body.setLinearDamping(3f);
 
     shape.dispose();
     return body;
