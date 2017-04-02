@@ -25,8 +25,9 @@ public class Game extends ApplicationAdapter {
 
   public static OrthographicCamera camera;
   public static World world;
+  public static RayHandler rayHandler;
+
   private Box2DDebugRenderer box2DDebugRenderer;
-  private RayHandler rayHandler;
   private SpriteBatch batch;
   private OrthogonalTiledMapRenderer tiledMapRenderer;
 
@@ -43,6 +44,14 @@ public class Game extends ApplicationAdapter {
 //    world.setContactListener(new GameContactListener());
     box2DDebugRenderer = new Box2DDebugRenderer();
 
+    //light
+    rayHandler = new RayHandler(world);
+    RayHandler.useDiffuseLight(true);
+    rayHandler.setCulling(true);
+    rayHandler.setCombinedMatrix(camera);
+
+
+
     EntityManager.create();
 
     batch = new SpriteBatch();
@@ -52,11 +61,7 @@ public class Game extends ApplicationAdapter {
     //init camera manager
     CameraManager.getInstance().init(camera);
 
-    //light
-    rayHandler = new RayHandler(world);
-    RayHandler.useDiffuseLight(true);
-    rayHandler.setCulling(true);
-    rayHandler.setCombinedMatrix(camera);
+
 
     InputManager.getInstance().init();
   }
