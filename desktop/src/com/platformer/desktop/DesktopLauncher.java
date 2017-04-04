@@ -2,7 +2,7 @@ package com.platformer.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.platformer.Box2dLightTest2;
+import com.platformer.Game;
 import com.platformer.util.Settings;
 
 public class DesktopLauncher {
@@ -23,7 +23,6 @@ public class DesktopLauncher {
       config.x = settings.x;
     }
 
-//    new LwjglApplication(new Game(), config);
-    new LwjglApplication(new Box2dLightTest2(), config);
+    new LwjglApplication(new Game(), config);
   }
 }

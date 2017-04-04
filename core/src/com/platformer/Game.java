@@ -1,15 +1,19 @@
 package com.platformer;
 
 import box2dLight.RayHandler;
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.platformer.entities.Player;
@@ -17,39 +21,31 @@ import com.platformer.managers.CameraManager;
 import com.platformer.managers.EntityManager;
 import com.platformer.managers.InputManager;
 import com.platformer.managers.LevelManager;
-import com.platformer.util.Settings;
 
 import static com.platformer.util.Settings.PPM;
 
-public class Game extends ApplicationAdapter {
 
-  public static OrthographicCamera camera;
+public class Game extends InputAdapter implements ApplicationListener {
   public static World world;
+  public static OrthographicCamera camera;
   public static RayHandler rayHandler;
 
-  private Box2DDebugRenderer box2DDebugRenderer;
   private SpriteBatch batch;
+  private Box2DDebugRenderer b2dr;
   private OrthogonalTiledMapRenderer tiledMapRenderer;
 
   @Override
   public void create() {
-
-    //camera
     camera = new OrthographicCamera();
     camera.setToOrtho(false);
     camera.update();
 
-    //box2d
-    world = new World(new Vector2(0f, -9.8f), false);
-//    world.setContactListener(new GameContactListener());
-    box2DDebugRenderer = new Box2DDebugRenderer();
 
-    //light
-//    RayHandler.setGammaCorrection(true);
-//    RayHandler.useDiffuseLight(true);
+    batch = new SpriteBatch();
+    this.world = new World(new Vector2(0, -9.8f), false);
+    this.b2dr = new Box2DDebugRenderer();
 
     rayHandler = new RayHandler(world);
-    rayHandler.setShadows(true);
     rayHandler.setAmbientLight(.5f);
 
     EntityManager.create();
@@ -62,15 +58,10 @@ public class Game extends ApplicationAdapter {
     CameraManager.getInstance().init(camera);
 
     InputManager.getInstance().init();
-
   }
 
   @Override
-  public void pause() {
-  }
-
-  @Override
-  public void resume() {
+  public void resize(int width, int height) {
 
   }
 
@@ -80,40 +71,59 @@ public class Game extends ApplicationAdapter {
     Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-    float deltaTime = Gdx.graphics.getDeltaTime();
     float delta = Gdx.graphics.getDeltaTime();
-    world.step(deltaTime, 6, 2);
+    world.step(delta, 6, 2);
     rayHandler.update();
 
     Matrix4 debugMatrix = batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0);
 
-    CameraManager.getInstance().update(deltaTime);
-
+    cameraUpdate();
     batch.setProjectionMatrix(camera.combined);
-    rayHandler.setCombinedMatrix(camera.combined);
+    rayHandler.setCombinedMatrix(camera.combined.cpy().scl(PPM));
 
-//    tiledMapRenderer.setView(camera);
-//    tiledMapRenderer.render();
 
-    if(Settings.getInstance().debug) {
-      box2DDebugRenderer.render(Game.world, debugMatrix);
-    }
+    tiledMapRenderer.setView(camera);
+    tiledMapRenderer.render();
 
+    b2dr.render(world, debugMatrix);
     rayHandler.render();
 
-    EntityManager.getInstance().update();
-    InputManager.getInstance().update();
-    Player.getInstance().update();
+//    CameraManager.getInstance().update(delta);
 
-    GdxAI.getTimepiece().update(deltaTime);//TODO not sure if required
+    EntityManager.getInstance().update();
+    InputManager.getInstance().update(delta);
+
+    GdxAI.getTimepiece().update(delta);//TODO not sure if required
+  }
+
+  @Override
+  public void pause() {
+
+  }
+
+  @Override
+  public void resume() {
+
   }
 
   @Override
   public void dispose() {
     rayHandler.dispose();
-    box2DDebugRenderer.dispose();
+    b2dr.dispose();
     world.dispose();
-    super.dispose();
+  }
+
+
+  private void cameraUpdate() {
+    lerpToTarget(camera, Player.getInstance().getCenter());
+  }
+
+  public static void lerpToTarget(Camera camera, Vector2 target) {
+    // a + (b - a) * lerp factor
+    Vector3 position = camera.position;
+    position.x = camera.position.x + (target.x - camera.position.x) * .1f;
+    position.y = camera.position.y + (target.y - camera.position.y) * .1f;
+    camera.position.set(position);
+    camera.update();
   }
 }

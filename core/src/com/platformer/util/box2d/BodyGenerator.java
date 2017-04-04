@@ -1,12 +1,12 @@
 package com.platformer.util.box2d;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.platformer.Box2dLightTest2;
+import com.platformer.Game;
 
 import static com.platformer.util.Settings.MPP;
 
 public class BodyGenerator {
-  private static World world = Box2dLightTest2.world;
+  private static World world = Game.world;
 
   public static Body createPlayer() {
     BodyDef bodyDef = new BodyDef();
@@ -25,7 +25,7 @@ public class BodyGenerator {
     fdef.filter.maskBits = LevelPhysicsGenerator.BIT_PLAYER | LevelPhysicsGenerator.BIT_WALL | LevelPhysicsGenerator.BIT_SENSOR;
     fdef.filter.groupIndex = 0;
     body.createFixture(fdef);
-    body.setLinearDamping(3f);
+    body.setLinearDamping(2f);
 
     shape.dispose();
     return body;

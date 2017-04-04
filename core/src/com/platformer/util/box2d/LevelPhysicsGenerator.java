@@ -27,7 +27,6 @@ import static com.platformer.util.Settings.MPP;
 /**
  *
  */
-
 public class LevelPhysicsGenerator {
   public static final String COLLISION_LAYER = "CollisionLayer";
   public static final String LIGHTS_LAYER = "LightsLayer";
@@ -43,6 +42,9 @@ public class LevelPhysicsGenerator {
   public static final String PROPERTY_OBJECT_TYPE = "type";
 
 
+  public static final short BIT_WALL = 1;
+  public static final short BIT_PLAYER = 2;
+  public static final short BIT_SENSOR = 4;
 
   public void createPhysics(TiledMap map, World world, RayHandler rayHandler) {
     createCollidables(map, world, COLLISION_LAYER);
@@ -88,10 +90,6 @@ public class LevelPhysicsGenerator {
       }
     }
   }
-
-  public static final short BIT_WALL = 1;
-  public static final short BIT_PLAYER = 2;
-  public static final short BIT_SENSOR = 4;
 
   public void createCollidables(TiledMap map, World world, String layerName) {
     MapLayer layer = map.getLayers().get(layerName);

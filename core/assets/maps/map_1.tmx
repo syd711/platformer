@@ -47,7 +47,7 @@
   <object id="13" x="2" y="490" width="1275.33" height="124.667"/>
  </objectgroup>
  <objectgroup name="LightsLayer">
-  <object id="14" type="ConeLight" x="169.334" y="640" width="228" height="249.333">
+  <object id="14" type="ConeLight" x="186.334" y="568" width="228" height="249.333">
    <properties>
     <property name="coneDegree" type="float" value="30"/>
     <property name="lightDegree" type="float" value="10"/>
@@ -63,7 +63,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="17" type="PointLight" x="631.333" y="545.667" width="341.333" height="334.667">
+  <object id="17" type="PointLight" x="37.333" y="521.667" width="341.333" height="334.667">
    <ellipse/>
   </object>
   <object id="18" type="PointLight" x="-115.333" y="551.666" width="293.333" height="264.001">
