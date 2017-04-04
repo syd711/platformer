@@ -3,7 +3,6 @@ package com.platformer;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.Camera;
@@ -77,7 +76,6 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     Matrix4 debugMatrix = batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0);
 
-    cameraUpdate();
     batch.setProjectionMatrix(camera.combined);
     rayHandler.setCombinedMatrix(camera.combined.cpy().scl(PPM));
 
@@ -88,7 +86,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     b2dr.render(world, debugMatrix);
     rayHandler.render();
 
-//    CameraManager.getInstance().update(delta);
+    CameraManager.getInstance().update(delta);
 
     EntityManager.getInstance().update();
     InputManager.getInstance().update(delta);
@@ -114,16 +112,5 @@ public class Game extends InputAdapter implements ApplicationListener {
   }
 
 
-  private void cameraUpdate() {
-    lerpToTarget(camera, Player.getInstance().getCenter());
-  }
 
-  public static void lerpToTarget(Camera camera, Vector2 target) {
-    // a + (b - a) * lerp factor
-    Vector3 position = camera.position;
-    position.x = camera.position.x + (target.x - camera.position.x) * .1f;
-    position.y = camera.position.y + (target.y - camera.position.y) * .1f;
-    camera.position.set(position);
-    camera.update();
-  }
 }

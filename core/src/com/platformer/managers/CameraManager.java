@@ -1,6 +1,8 @@
 package com.platformer.managers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.platformer.components.PositionComponent;
 import com.platformer.components.ScreenPositionComponent;
 import com.platformer.entities.Player;
@@ -11,7 +13,6 @@ import java.util.Random;
 public class CameraManager {
   private static final double ZOOM_DELTA = 0.05;
   private OrthographicCamera camera;
-  private PositionComponent positionComponent;
   private ScreenPositionComponent screenPositionComponent;
 
   private static CameraManager instance = new CameraManager();
@@ -36,7 +37,6 @@ public class CameraManager {
 
     Player player = Player.getInstance();
     this.screenPositionComponent = player.getComponent(ScreenPositionComponent.class);
-    this.positionComponent = player.getComponent(PositionComponent.class);
   }
 
   public void shake(float intensity, float duration) {
@@ -62,21 +62,22 @@ public class CameraManager {
   public void update(float deltaTime) {
     updateZoom();
 
-    float x = Math.round(positionComponent.x);
-    float y = Math.round(positionComponent.y);
+    lerpToTarget(Player.getInstance().getCenter());
 
-    float centerX = screenPositionComponent.getDefaultX();
-    float centerY = screenPositionComponent.getDefaultY();
-
-    camera.position.x = 500;//x;
-    camera.position.y = 500;//y;
-
-    screenPositionComponent.setX(centerX);
-    screenPositionComponent.setY(centerY);
+    screenPositionComponent.setX(Player.getInstance().getCenter().x);
+    screenPositionComponent.setY(Player.getInstance().getCenter().y);
 
     checkShakeEffect(deltaTime);
 
     camera.update();
+  }
+
+  private void lerpToTarget(Vector2 target) {
+    // a + (b - a) * lerp factor
+    Vector3 position = camera.position;
+    position.x = camera.position.x + (target.x - camera.position.x) * .1f;
+    position.y = camera.position.y + (target.y - camera.position.y) * .1f;
+    camera.position.set(position);
   }
 
   // ---------------------- Helper ------------------------------------------------
