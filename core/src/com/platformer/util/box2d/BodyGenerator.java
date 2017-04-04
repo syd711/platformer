@@ -1,14 +1,12 @@
 package com.platformer.util.box2d;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.platformer.Game;
+import com.platformer.Box2dLightTest2;
 
 import static com.platformer.util.Settings.MPP;
-import static com.platformer.util.box2d.PhysicsManager.MASK_PLAYER;
-import static com.platformer.util.box2d.PhysicsManager.PLAYER_BITS;
 
 public class BodyGenerator {
-  private static World world = Game.world;
+  private static World world = Box2dLightTest2.world;
 
   public static Body createPlayer() {
     BodyDef bodyDef = new BodyDef();
@@ -23,9 +21,9 @@ public class BodyGenerator {
     fdef.shape = shape;
     fdef.isSensor = false;
     fdef.friction = 0.5f;
+    fdef.filter.categoryBits = LevelPhysicsGenerator.BIT_WALL;
+    fdef.filter.maskBits = LevelPhysicsGenerator.BIT_PLAYER | LevelPhysicsGenerator.BIT_WALL | LevelPhysicsGenerator.BIT_SENSOR;
     fdef.filter.groupIndex = 0;
-    fdef.filter.categoryBits = PLAYER_BITS;
-    fdef.filter.maskBits = MASK_PLAYER;
     body.createFixture(fdef);
     body.setLinearDamping(3f);
 

@@ -45,25 +45,24 @@ public class Game extends ApplicationAdapter {
     box2DDebugRenderer = new Box2DDebugRenderer();
 
     //light
+//    RayHandler.setGammaCorrection(true);
+//    RayHandler.useDiffuseLight(true);
+
     rayHandler = new RayHandler(world);
-    RayHandler.useDiffuseLight(true);
-    rayHandler.setCulling(true);
-    rayHandler.setCombinedMatrix(camera);
-
-
+    rayHandler.setShadows(true);
+    rayHandler.setAmbientLight(.5f);
 
     EntityManager.create();
 
     batch = new SpriteBatch();
 
-    tiledMapRenderer = LevelManager.getInstance().loadLevel(batch, "map_1");
+    tiledMapRenderer = LevelManager.getInstance().loadLevel(batch, world, rayHandler, "map_1");
 
     //init camera manager
     CameraManager.getInstance().init(camera);
 
-
-
     InputManager.getInstance().init();
+
   }
 
   @Override
@@ -77,38 +76,42 @@ public class Game extends ApplicationAdapter {
 
   @Override
   public void render() {
-    float deltaTime = Gdx.graphics.getDeltaTime();
-
-    world.step(deltaTime, 6, 2);
-
-    Matrix4 debugMatrix = batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0);
-
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+    float deltaTime = Gdx.graphics.getDeltaTime();
+    float delta = Gdx.graphics.getDeltaTime();
+    world.step(deltaTime, 6, 2);
+    rayHandler.update();
+
+    Matrix4 debugMatrix = batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0);
+
     CameraManager.getInstance().update(deltaTime);
 
     batch.setProjectionMatrix(camera.combined);
+    rayHandler.setCombinedMatrix(camera.combined);
 
-    rayHandler.setCombinedMatrix(camera);
-    rayHandler.updateAndRender();
-
-    tiledMapRenderer.setView(camera);
-    tiledMapRenderer.render();
+//    tiledMapRenderer.setView(camera);
+//    tiledMapRenderer.render();
 
     if(Settings.getInstance().debug) {
       box2DDebugRenderer.render(Game.world, debugMatrix);
     }
 
+    rayHandler.render();
+
     EntityManager.getInstance().update();
     InputManager.getInstance().update();
     Player.getInstance().update();
+
     GdxAI.getTimepiece().update(deltaTime);//TODO not sure if required
   }
 
   @Override
   public void dispose() {
+    rayHandler.dispose();
     box2DDebugRenderer.dispose();
     world.dispose();
     super.dispose();

@@ -1,11 +1,12 @@
 package com.platformer.managers;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.platformer.Game;
-import com.platformer.util.box2d.LevelCollisionGenerator;
+import com.badlogic.gdx.physics.box2d.World;
+import com.platformer.util.box2d.LevelPhysicsGenerator;
 
 /**
  *
@@ -20,12 +21,12 @@ public class LevelManager {
   private LevelManager() {
   }
 
-  public OrthogonalTiledMapRenderer loadLevel(SpriteBatch batch, String name) {
+  public OrthogonalTiledMapRenderer loadLevel(SpriteBatch batch, World world, RayHandler rayHandler, String name) {
     TiledMap tiledMap = new TmxMapLoader().load("maps/" + name + ".tmx");
     OrthogonalTiledMapRenderer tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
-    LevelCollisionGenerator lcg = new LevelCollisionGenerator(Game.world);
-    lcg.createPhysics(tiledMap);
+    LevelPhysicsGenerator lcg = new LevelPhysicsGenerator();
+    lcg.createPhysics(tiledMap, world, rayHandler);
 
     return tiledMapRenderer;
   }

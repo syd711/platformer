@@ -29,13 +29,12 @@ public class Player extends GameEntity {
   public void createComponents() {
     PositionComponent positionComponent = ComponentFactory.addPositionComponent(this);
 
-    Vector2 position = Box2dUtil.toBox2Vector(new Vector2(500, 700));
+    Vector2 position = Box2dUtil.toBox2Vector(new Vector2(200, 200));
     Body body = BodyGenerator.createPlayer();
     body.setTransform(position, 0);
     bodyComponent = ComponentFactory.addBodyComponent(this, body);
     positionComponent.setPosition(position);
-
-    add(new ScreenPositionComponent(500, 500));
+    add(new ScreenPositionComponent(100, 100));
   }
 
   public void update() {

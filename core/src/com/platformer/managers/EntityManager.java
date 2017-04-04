@@ -9,7 +9,6 @@ import com.platformer.components.ComponentFactory;
 import com.platformer.components.Destroyable;
 import com.platformer.entities.GameEntity;
 import com.platformer.entities.Player;
-import com.platformer.systems.LightSystem;
 import com.platformer.util.box2d.Box2dUtil;
 
 import java.util.ArrayList;
@@ -32,8 +31,8 @@ public class EntityManager {
   private void init() {
     engine.addEntity(Player.getInstance());
 
-    LightSystem lightSystem = new LightSystem(Game.rayHandler);
-    engine.addSystem(lightSystem);
+//    LightSystem lightSystem = new LightSystem(Game.rayHandler);
+//    engine.addSystem(lightSystem);
   }
 
   public static EntityManager create() {

@@ -29,4 +29,9 @@ public class ComponentFactory {
     return component;
   }
 
+  public static LightComponent addLightComponent(Entity entity) {
+    LightComponent component = createComponent(LightComponent.class);
+    entity.add(component);
+    return component;
+  }
 }

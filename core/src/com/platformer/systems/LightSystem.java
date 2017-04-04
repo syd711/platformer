@@ -4,10 +4,7 @@ import box2dLight.RayHandler;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.platformer.components.LightComponent;
-import com.platformer.components.PositionComponent;
 import com.platformer.util.Settings;
 
 public class LightSystem extends EntitySystem {
@@ -18,7 +15,7 @@ public class LightSystem extends EntitySystem {
 
   public LightSystem(RayHandler rayHandler) {
     this.rayHandler = rayHandler;
-    this.rayHandler.setAmbientLight(brightness, brightness, brightness, brightness);
+//    this.rayHandler.setAmbientLight(brightness, brightness, brightness, brightness);
   }
 
   public void fadeOut(boolean fadeOut) {
@@ -32,12 +29,12 @@ public class LightSystem extends EntitySystem {
 
   @Override
   public void update(float deltaTime) {
-    updateAmbientLight();
-    Family family = Family.all(LightComponent.class).get();
-    ImmutableArray<Entity> entitiesFor = getEngine().getEntitiesFor(family);
-    for(Entity entity : entitiesFor) {
-      process(entity);
-    }
+//    updateAmbientLight();
+//    Family family = Family.all(LightComponent.class).get();
+//    ImmutableArray<Entity> entitiesFor = getEngine().getEntitiesFor(family);
+//    for(Entity entity : entitiesFor) {
+//      process(entity);
+//    }
   }
 
   private void updateAmbientLight() {
@@ -54,18 +51,18 @@ public class LightSystem extends EntitySystem {
   }
 
   private void process(Entity entity) {
-    LightComponent light = lightsMap.get(entity);
-    if(brightness == 0) {
-      light.setTargetValue(0f);
-    }
-    else {
-      light.setMaxValue();
-    }
-    light.updateValue();
-    if(light.isMoveable()) {
-      PositionComponent positionComponent = entity.getComponent(PositionComponent.class);
-      light.setPosition(positionComponent.x, positionComponent.y);
-    }
+//    LightComponent light = lightsMap.get(entity);
+//    if(brightness == 0) {
+//      light.setTargetValue(0f);
+//    }
+//    else {
+//      light.setMaxValue();
+//    }
+//    light.updateValue();
+//    if(light.isMoveable()) {
+//      PositionComponent positionComponent = entity.getComponent(PositionComponent.class);
+//      light.setPosition(positionComponent.x, positionComponent.y);
+//    }
   }
 
   public boolean isOutFaded() {
